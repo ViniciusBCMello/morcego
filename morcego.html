@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoRadar - Simulador de Ecolocalização</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:image/svg+xml, <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'> <text y='.9em' font-size='90' fill='%2300bfff'>🦇 </text> </svg>">
+</head>
+<body>
+    <div class="app" id="app">
+
+        <!-- TOPO -->
+        <header class="header">
+            <h1 class="title">Simulador de Ecolocalização</h1>
+        </header>
+
+        <!-- CENTRO -->
+        <main class="content">
+            <!-- PAINEL DE STATUS -->
+            <div class="game-stats" id="gameStats" style="display: none;">
+                <div class="stat">Recorde: <span id="highscore">0</span></div>
+                <div class="stat">Pontos: <span id="score">0</span></div>
+                <div class="stat">Insetos: <span id="insects">0</span>/<span id="totalInsects">0</span></div>
+                <div class="stat">Nível: <span id="level">1</span></div>
+                <div class="stat">
+                    Energia: <span id="energy">100</span>%
+                    <div class="energy-bar">
+                        <div class="energy-fill" id="energyFill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- RADAR + MORCEGO -->
+            <div class="radar-container" id="radarWrapper" style="display: none;">
+                <div class="radar-area" id="radarArea"></div>
+            </div>
+            <div class="bat-image" id="batImage" draggable="true" title="Clique para curiosidades">🦇</div>
+        
+            <!-- BOTÕES DE DIFICULDADE -->
+            <div class="difficulty-selector" id="difficultySelector" style="display: none;">
+                <button class="difficulty-btn active" data-level="1">Fácil</button>
+                <button class="difficulty-btn" data-level="2">Médio</button>
+                <button class="difficulty-btn" data-level="3">Difícil</button>
+            </div>  
+        </main>
+            <!-- Visualização de onda -->
+            <div class="wave-placeholder">
+                <div class="wave-visual" id="waveVisual">
+                    <canvas class="wave-canvas" id="waveCanvas"></canvas>
+                </div>
+            </div>   
+
+        <!-- RODAPÉ -->
+        <footer class="footer">
+            <div class="controls" id="controls">
+                <button class="btn" id="sonarBtn">🔊 Emitir Sonar</button>
+                <button class="btn game-mode" id="gameBtn">🎮 Modo Jogo</button>
+                <button class="btn scientific-mode" id="scientificBtn">🔬 Modo Científico</button>
+                <button class="btn" id="nightBtn">🌙 Visão Noturna</button>
+            </div>
+
+            <div style="text-align: center; margin-top: 10px;">
+                <button class="btn" id="resetBtn">🔄 Reiniciar Ambiente</button>
+            </div>
+        </footer>
+
+        <!-- Painel de curiosidades -->
+        <div class="facts-panel" id="factsPanel">
+            <button class="close-btn" id="closeFacts">×</button>
+            <h2>🧠 Curiosidades sobre Morcegos<span id="factGroupIndicator">1/5</span></h2>
+            <ul>
+            </ul>
+        </div>
+
+        <!-- Painel científico -->
+        <div class="info-panel" id="scientificPanel">
+            <button class="close-btn" id="closeScientific">×</button>
+            <h2>🔬 Dados Científicos</h2>
+            <p>Tempo de retorno: <strong id="echoTime">0ms</strong></p>
+            <p>Distância estimada: <strong id="distance">0.00m</strong></p>
+            <p>Frequência: <strong id="frequency">40kHz</strong></p>
+            <p>Intensidade: <strong id="intensity">80dB</strong></p>
+            <p>Ângulo de emissão: <strong id="angle">60°</strong></p>
+            <p>Objetos detectados: <strong id="objectsDetected">0</strong></p>
+        </div>
+
+        <!-- Visão Noturna -->
+        <div class="night-vision-controls" id="nightVisionControls" style="display: none;">
+            <button class="btn" id="exitNightBtn">Sair da Visão Noturna</button>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,584 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    color: white;
+    overflow-x: hidden;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header {
+    flex: 0 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 10px;
+}
+
+.footer {
+    flex: 0 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.bat-image {
+    width: 20px;
+    height: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 10px #00bfff);
+    animation: float 3s ease-in-out infinite;
+    position: absolute;
+    z-index: 100;
+    user-select: none;
+}
+
+.bat-image:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 20px #00bfff);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.title {
+    font-size: 28px;
+    margin: 1rem 0;
+    text-align: center;
+    text-shadow: 0 0 10px #00bfff;
+    background: linear-gradient(45deg, #00bfff, #1e90ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.controls {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    background: linear-gradient(45deg, #1e90ff, #00bfff);
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(30, 144, 255, 0.3);
+    font-weight: bold;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30, 144, 255, 0.5);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn.game-mode {
+    background: linear-gradient(45deg, #ff6b6b, #ffa500);
+}
+
+.btn.scientific-mode {
+    background: linear-gradient(45deg, #32cd32, #228b22);
+}
+
+.radar-container {
+    position: relative;
+    margin: 20px 0;
+}
+
+.radar-area {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    border: 2px solid #00bfff;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 191, 255, 0.1) 0%, transparent 70%);
+    overflow: hidden;
+}
+
+.sonar-range {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px dashed #00bfff;
+    border-radius: 50%;
+    opacity: 0.3;
+}
+
+.sound-wave {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #00bfff;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    margin-left: -5px;
+    margin-top: -5px;
+    transform: scale(0.1);
+    transform-origin: center;
+    opacity: 0.9;
+    z-index: 5;
+    animation: sonar-pulse 1.5s ease-in-out forwards;
+    box-shadow: 0 0 2px #00bfff;
+    pointer-events: none;
+}
+
+.sound-wave::before,
+.sound-wave::after {
+    content: '';
+    position: absolute;
+    border: 1px solid #00bfff;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    opacity: 0;
+    animation: sonar-pulse 1.5s ease-in-out forwards;
+    box-shadow: 0 0 2px #00bfff;
+}
+
+.sound-wave::before {
+    width: 100%;
+    height: 100%;
+    animation-delay: 0.2s;
+}
+
+.sound-wave::after {
+    width: 100%;
+    height: 100%;
+    animation-delay: 0.4s;
+}
+
+@keyframes sonar-pulse {
+    0% {
+        transform: scale(0.1);
+        opacity: 0.9;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0.1);
+        opacity: 0;
+    }
+}
+
+.insect {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    display: none;
+}
+
+.insect.mosquito {
+    color: #ff5555;
+    text-shadow: 0 0 10px #ff5555;
+}
+
+.insect.beetle {
+    color: #ffaa00;
+    text-shadow: 0 0 10px #ffaa00;
+}
+
+.insect.fly {
+    color: #55ff55;
+    text-shadow: 0 0 10px #55ff55;
+}
+
+.insect.caught {
+    color: #00ff00;
+    text-shadow: 0 0 15px #00ff00;
+    animation: none;
+}
+
+.obstacle {
+    position: absolute;
+    background: #8b4513;
+    border-radius: 5px;
+    box-shadow: 0 0 8px #8b4513;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
+.info-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #00bfff;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 300px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.info-panel.show {
+    transform: translateX(0);
+}
+
+.facts-panel {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #00bfff;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 350px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.facts-panel.show {
+    transform: translateX(0);
+}
+
+.facts-panel h2, .info-panel h2 {
+    color: #00bfff;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.facts-panel ul {
+    list-style: none;
+    padding: 0;
+}
+
+.facts-panel li {
+    margin: 10px 0;
+    padding: 8px;
+    background: rgba(30, 144, 255, 0.1);
+    border-radius: 5px;
+    border-left: 3px solid #00bfff;
+}
+
+.game-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.stat {
+    background: rgba(0, 191, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid #00bfff;
+}
+
+.energy-bar {
+    width: 100px;
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.energy-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff4444, #ffaa00, #00ff00);
+    transition: width 0.3s ease;
+}
+
+.cooldown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #00bfff;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.countdown-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.countdown-content {
+    text-align: center;
+    color: white;
+}
+
+.countdown-number {
+    font-size: 120px;
+    font-weight: bold;
+    color: #00bfff;
+    text-shadow: 0 0 20px #00bfff;
+    animation: pulse 1s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.wave-placeholder {
+    width: 100%;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wave-visual {
+    width: 300px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid #00bfff;
+    border-radius: 10px;
+    padding: 10px;
+    display: none;
+}
+
+.wave-visual.show {
+    display: block;
+}
+
+.wave-canvas {
+    width: 100%;
+    height: 80px;
+    background: #000;
+    border-radius: 5px;
+}
+
+.difficulty-selector {
+    margin: 20px 0;
+}
+
+.difficulty-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #00bfff;
+    color: white;
+    padding: 8px 16px;
+    margin: 0 5px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.difficulty-btn.active {
+    background: #00bfff;
+    color: black;
+}
+
+.bat-sonar-wave {
+    position: absolute;
+    border: 1px solid #00bfff;
+    border-radius: 50%;
+    transform: scale(0.1);
+    transform-origin: center;
+    animation: bat-sonar-wave 1.5s ease-in-out forwards;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.9;
+    box-shadow: 0 0 2px #00bfff;
+}
+
+.bat-sonar-wave::before,
+.bat-sonar-wave::after {
+    content: '';
+    position: absolute;
+    border: 1px solid #00bfff;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    opacity: 0;
+    animation: bat-sonar-wave 1.5s ease-in-out forwards;
+    box-shadow: 0 0 2px #00bfff;
+}
+
+.bat-sonar-wave::before {
+    width: 100%;
+    height: 100%;
+    animation-delay: 0.2s;
+}
+
+.bat-sonar-wave::after {
+    width: 100%;
+    height: 100%;
+    animation-delay: 0.4s;
+}
+
+@keyframes bat-sonar-wave {
+    0% {
+        transform: scale(0.5);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(4.0);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+
+.night-vision {
+    filter: contrast(1.5) brightness(0.4) sepia(0.5) hue-rotate(70deg);
+}
+
+.night-vision .title,
+.night-vision .controls,
+.night-vision .game-stats,
+.night-vision .difficulty-selector,
+.night-vision .info-panel,
+.night-vision .facts-panel {
+    display: none !important;
+}
+
+.night-vision .radar-area {
+    border-color: #00ff00;
+    background: radial-gradient(circle, rgba(0, 255, 0, 0.1) 0%, transparent 70%);
+}
+
+.night-vision .sonar-range {
+    border-color: #00ff00;
+}
+
+.night-vision .insect {
+    color: #ff5555;
+    text-shadow: 0 0 15px #ff5555;
+}
+
+.night-vision .insect.caught {
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00;
+}
+
+.night-vision .obstacle {
+    background: #5555ff;
+    box-shadow: 0 0 15px #5555ff;
+}
+
+.night-vision-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #00bfff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .info-panel, .facts-panel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: none;
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .radar-area {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+.world-object {
+    position: absolute;
+    z-index: 1;
+}
+
+.world-insect {
+    font-size: 20px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    display: none;
+}
+
+.world-obstacle {
+    background: #8b4513;
+    border-radius: 5px;
+    box-shadow: 0 0 8px #8b4513;
+    display: none;
+}
+
+#factGroupIndicator {
+    font-size: 14px;
+    color: #00bfff;
+    margin-left: 10px;
+}
